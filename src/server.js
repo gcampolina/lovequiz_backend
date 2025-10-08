@@ -4,12 +4,16 @@ import cors from "cors";
 import "dotenv/config";
 
 // importar rotas de pagamento
-import paymentRoutes from "./controllers/paymentRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
+
 app.use(cors({
-  origin: "*", // porta do seu frontend (Live Server)
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 app.use(express.json());
 
 // rota de teste
