@@ -4,6 +4,6 @@ import { createPayment, checkPaymentStatus } from "../controllers/paymentControl
 const router = express.Router();
 
 router.post("/create-payment", createPayment);
-router.get("/check-status/:id", checkPaymentStatus);
+router.get("/check-status", checkPaymentStatus);
 
 export default router;
