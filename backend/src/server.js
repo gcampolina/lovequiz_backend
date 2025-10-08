@@ -4,7 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 
 // importar rotas de pagamento
-import paymentRoutes from "./api/paymentRoutes.js";
+import paymentRoutes from "./controllers/paymentRoutes.js";
 
 const app = express();
 app.use(cors({
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 });
 
 // rotas de pagamento
-app.use("/api/payments", paymentRoutes);
+app.use("/api", paymentRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
