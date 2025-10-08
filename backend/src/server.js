@@ -4,7 +4,7 @@ import cors from "cors";
 import "dotenv/config";
 
 // importar rotas de pagamento
-import paymentRoutes from "./routes/paymentRoutes.js";
+import paymentRoutes from "./api/paymentRoutes.js";
 
 const app = express();
 app.use(cors({

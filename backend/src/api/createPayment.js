@@ -1,14 +1,16 @@
-// src/controllers/paymentController.js
 import { MercadoPagoConfig, Preference } from "mercadopago";
 
 const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
 
-export const createPayment = async (req, res) => {
-  const { amount } = req.body;
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method Not Allowed" });
+  }
 
   try {
-    const preference = new Preference(client);
+    const { amount } = req.body;
 
+    const preference = new Preference(client);
     const response = await preference.create({
       body: {
         items: [
@@ -23,18 +25,11 @@ export const createPayment = async (req, res) => {
       }
     });
 
-    res.json({ checkout_url: `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${response.id}` });
-  } catch (err) {
-    console.error("Erro Mercado Pago:", err);
+    res.status(200).json({
+      checkout_url: `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${response.id}`
+    });
+  } catch (error) {
+    console.error("Erro Mercado Pago:", error);
     res.status(500).json({ error: "Erro ao criar pagamento" });
   }
-};
-
-// Se você ainda quiser uma rota de status (simulada):
-export const checkPaymentStatus = (req, res) => {
-  const { id } = req.params;
-  res.json({
-    paymentId: id,
-    status: "approved"
-  });
-};
+}
