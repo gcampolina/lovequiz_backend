@@ -27,6 +27,15 @@ export const createPayment = async (req, res) => {
           pending: "https://yourlovelanguage.netlify.app/result.html?paid=pending",
         },
         auto_return: "approved",
+        payment_methods: {
+          excluded_payment_types: [
+            { id: "ticket" }, 
+            { id: "atm" }     
+          ],
+          excluded_payment_methods: [],
+          default_payment_method_id: "pix",
+          installments: 1,
+        },
       },
     });
 
