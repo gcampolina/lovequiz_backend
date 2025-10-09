@@ -17,7 +17,7 @@ export const createPayment = async (req, res) => {
             {
               title: "LoveQuiz - Resultado do Quiz",
               quantity: 1,
-              unit_price: 1.99,
+              unit_price: 1,
               currency_id: "BRL",
             },
           ],
@@ -37,9 +37,13 @@ export const createPayment = async (req, res) => {
     });
 
 
+    // Gerar token seguro
+    const token = crypto.randomBytes(16).toString("hex");
+    activeTokens[token] = { prefId: response.id, status: "pending" };
+
     res.json({
-      preference_id: response.id,
       checkout_url: `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${response.id}`,
+      token,
     });
   } catch (err) {
     console.error("Erro Mercado Pago:", err);
@@ -69,20 +73,22 @@ export const paymentWebhook = async (req, res) => {
   try {
     const { type, data } = req.body;
 
-    if (type === "payment" && data && data.id) {
+    if (type === "payment" && data?.id) {
       const paymentData = await new Payment(client).get({ id: data.id });
 
       if (paymentData.status === "approved") {
-        console.log("✅ Pagamento aprovado:", paymentData.id);
-        // Aqui você poderia salvar no banco, liberar acesso etc.
-      } else {
-        console.log("ℹ️ Pagamento ainda não aprovado:", paymentData.status);
+        // Encontrar o token relacionado (aqui, você precisaria mapear prefId -> token)
+        for (let token in activeTokens) {
+          if (activeTokens[token].prefId === paymentData.preference_id) {
+            activeTokens[token].status = "approved";
+          }
+        }
       }
     }
 
     res.sendStatus(200);
   } catch (err) {
-    console.error("Erro no webhook:", err);
+    console.error(err);
     res.sendStatus(500);
   }
 };
