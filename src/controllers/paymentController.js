@@ -17,7 +17,7 @@ export const createPayment = async (req, res) => {
             {
               title: "LoveQuiz - Resultado do Quiz",
               quantity: 1,
-              unit_price: 0.30,
+              unit_price: 1,
               currency_id: "BRL",
             },
           ],
