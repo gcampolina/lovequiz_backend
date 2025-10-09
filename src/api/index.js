@@ -1,3 +1,4 @@
+// src/api/index.js
 import express from "express";
 import paymentRoutes from "../routes/paymentRoutes.js";
 import cors from "cors";
