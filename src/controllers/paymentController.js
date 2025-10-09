@@ -17,7 +17,7 @@ export const createPayment = async (req, res) => {
             {
               title: "LoveQuiz - Resultado do Quiz",
               quantity: 1,
-              unit_price: 1,
+              unit_price: 1.99,
               currency_id: "BRL",
             },
           ],
@@ -37,13 +37,11 @@ export const createPayment = async (req, res) => {
     });
 
 
-    // Gerar token seguro
-    const token = crypto.randomBytes(16).toString("hex");
-    activeTokens[token] = { prefId: response.id, status: "pending" };
+    
 
     res.json({
+      preference_id: response.id,
       checkout_url: `https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=${response.id}`,
-      token,
     });
   } catch (err) {
     console.error("Erro Mercado Pago:", err);
